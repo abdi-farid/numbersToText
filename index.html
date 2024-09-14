@@ -1,29 +1,229 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Convertisseur de Montant</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="container">
-        <h1>Convertisseur de Montant en Texte</h1>
-        <label for="amount">Montant :</label>
-        <input type="number" id="amount" placeholder="Entrez un montant" inputmode="decimal" pattern="[0-9]*[.]?[0-9]*">
-        
-        <label for="language">Langue :</label>
-        <select id="language">
-            <option value="fr">Français</option>
-            <option value="en">Anglais</option>
-        </select>
-        
-        <button onclick="convertAmount()">Convertir</button>
-        
-        <h2>Résultat :</h2>
-        <p id="result"></p>
-    </div>
-    <script src="script.js"></script>
-</body>
-</html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+     <!-- Meta SEO -->
+     <meta name="description" content="Utilisez ce convertisseur pour transformer les nombres en lettres, en français ou arabe, pour vos chèques ou documents officiels." />
+     <meta name="keywords" content="convertisseur, nombres en lettres, chèque, dinar, DZD, français, arabe, algérie" />
+     <meta name="robots" content="index, follow" />
+ 
+     <!-- Open Graph Meta Tags -->
+     <meta property="og:title" content="Convertisseur de Nombres en Lettres - Chèque" />
+     <meta property="og:description" content="Transformez les nombres en lettres pour vos chèques en français ou en arabe." />
+     <meta property="og:type" content="website" />
+ 
+     <!-- Twitter Card Meta Tags -->
+     <meta name="twitter:card" content="summary_large_image" />
+     <meta name="twitter:title" content="Convertisseur de Nombres en Lettres - Chèque" />
+     <meta name="twitter:description" content="Convertissez rapidement vos montants en lettres, pour chèques ou autres documents." />
+ 
+
+     
+    <title>Convertisseur de Nombres en Lettres - Chèque</title>
+
+    <!-- Bootstrap CSS CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        background-color: #f0f4fb; /* Soft blue */
+        padding-top: 30px;
+      }
+      .cheque-container {
+        max-width: 90%;
+        margin: 0 auto;
+        background-color: #fffdf5; /* Light cream */
+        padding: 20px;
+        border: 2px solid #3b6ba5; /* Dark blue for the border */
+        border-radius: 15px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      .label-container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+      .label-container .form-label {
+        width: 48%;
+      }
+      .label-container .form-label.fr-label {
+        text-align: left;
+      }
+      .label-container .form-label.ar-label {
+        text-align: right;
+      }
+      .btn-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+      }
+      .btn-container .btn {
+        width: 100%;
+        background-color: #3b6ba5; /* Dark blue for the button */
+        color: white;
+      }
+      .result-container,
+      .title-container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+      .result-container p,
+      .title-container h2 {
+        width: 48%;
+      }
+      .result-container p.fr-result,
+      .title-container .fr-title {
+        text-align: left;
+        color: #3b6ba5; /* Dark blue for the text */
+      }
+      .result-container p.ar-result,
+      .title-container .ar-title {
+        text-align: right;
+        color: #3b6ba5; /* Dark blue for the text */
+      }
+      input,
+      select {
+        width: 100%;
+        border: 1px solid #3b6ba5; /* Dark blue for the border */
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        background-color: #f8f9fa; /* Light grey for inputs */
+      }
+      hr {
+        margin: 20px 0;
+        border: 1px solid #3b6ba5; /* Dark blue for the line */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="cheque-container">
+      <div class="title-container">
+        <h2 class="fr-title">Convertisseur de Nombres en Lettres</h2>
+        <h2 class="ar-title">محول الأرقام إلى كلمات</h2>
+      </div>
+
+      <!-- Formulaire -->
+      <form id="convertForm">
+        <div class="mb-3">
+          <div class="label-container">
+            <label for="numberInput" class="form-label fr-label"
+              >Entrez un nombre (DZD)</label
+            >
+            <label for="numberInput" class="form-label ar-label">
+              (دج) أدخل الرقم</label
+            >
+          </div>
+          <input
+            type="number"
+            step="any"
+            class="form-control"
+            id="numberInput"
+            placeholder="Entrez un montant en DZD"
+            required
+          />
+        </div>
+
+        <!-- Sélection de la langue -->
+        <div class="mb-3">
+          <div class="label-container">
+            <label for="languageSelect" class="form-label fr-label"
+              >Sélectionnez la langue</label
+            >
+            <label for="languageSelect" class="form-label ar-label"
+              >اختر اللغة</label
+            >
+          </div>
+          <select class="form-select" id="languageSelect">
+            <option value="fr" selected>Français</option>
+            <option value="ar">Arabe</option>
+          </select>
+        </div>
+
+        <div class="btn-container">
+          <button type="submit" class="btn">Convertir</button>
+        </div>
+      </form>
+
+      <hr />
+
+      <!-- Résultat -->
+      <div class="result-container">
+        <h5 class="fr-result">Résultat :</h5>
+        <h5 class="ar-result"> : النتيجة </h5>
+      </div>
+      <div class="result-container">
+        <p id="result" class="text-success fr-result"></p>
+        <p id="resultAr" class="text-success ar-result"></p>
+      </div>
+    </div>
+
+    <!-- JavaScript pour utiliser l'API -->
+    <script>
+      document
+        .getElementById("convertForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const number = document.getElementById("numberInput").value;
+          const language = document.getElementById("languageSelect").value;
+
+          let currency, decimalCurrency;
+          if (language === "fr") {
+            currency = "dinar";
+            decimalCurrency = "centimes";
+          } else if (language === "ar") {
+            currency = "دينار";
+            decimalCurrency = "مليم";
+          }
+
+          const url = "https://numbers-to-words1.p.rapidapi.com/api/converter/";
+          const options = {
+            method: "POST",
+            headers: {
+              "x-rapidapi-key":
+                "5ff5d612e5msh8e4fbbd465d5306p1f3eeajsnf95c4accf972",
+              "x-rapidapi-host": "numbers-to-words1.p.rapidapi.com",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              number: parseFloat(number),
+              delete_from_sentence: null,
+              currency: currency,
+              decimal_currency: decimalCurrency,
+              separator: "et",
+              decimal: 2,
+              language: language,
+            }),
+          };
+
+          try {
+            const response = await fetch(url, options);
+            const result = await response.json();
+
+            if (language === "fr") {
+              document.getElementById("result").innerText =
+                result.message || result.text || "Pas de résultat trouvé.";
+              document.getElementById("resultAr").innerText = "";
+            } else if (language === "ar") {
+              document.getElementById("resultAr").innerText =
+                result.message || result.text || "لم يتم العثور على نتيجة";
+              document.getElementById("result").innerText = "";
+            }
+          } catch (error) {
+            console.error(error);
+            document.getElementById("result").innerText =
+              "Une erreur est survenue. Veuillez réessayer.";
+            document.getElementById("resultAr").innerText =
+              "حدث خطأ. يرجى المحاولة مرة أخرى.";
+          }
+        });
+    </script>
+  </body>
+</html>
